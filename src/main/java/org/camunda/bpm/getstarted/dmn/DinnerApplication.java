@@ -16,6 +16,7 @@
  */
 package org.camunda.bpm.getstarted.dmn;
 
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -40,12 +41,18 @@ public class DinnerApplication extends ServletProcessApplication
 
       VariableMap variables = Variables.createVariables()
         .putValue("season", "Spring")
-        .putValue("guestCount", 10);
+        .putValue("guestCount", 10)
+        .putValue("guestsWithChildren", false);
 
       DmnDecisionTableResult dishDecisionResult = decisionService.evaluateDecisionTableByKey("dish", variables);
       String desiredDish = dishDecisionResult.getSingleEntry();
 
       LOGGER.log(Level.INFO, "\n\nDesired dish: {0}\n\n", desiredDish);
+
+      DmnDecisionTableResult beveragesDecisionResult = decisionService.evaluateDecisionTableByKey("beverages", variables);
+      List<Object> beverages = beveragesDecisionResult.collectEntries("beverages");
+
+      LOGGER.log(Level.INFO, "\n\nDesired beverages: {0}\n\n", beverages);
     }
 
 }
