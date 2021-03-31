@@ -17,6 +17,8 @@
 package org.camunda.bpm.getstarted.dmn;
 
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.camunda.bpm.application.PostDeploy;
 import org.camunda.bpm.application.ProcessApplication;
@@ -30,6 +32,7 @@ import org.camunda.bpm.engine.variable.Variables;
 @ProcessApplication("Dinner App DMN")
 public class DinnerApplication extends ServletProcessApplication
 {
+    protected final static Logger LOGGER = Logger.getLogger(DinnerApplication.class.getName());
 
     @PostDeploy
     public void evaluateDecisionTable(ProcessEngine processEngine) {
@@ -44,12 +47,12 @@ public class DinnerApplication extends ServletProcessApplication
       DmnDecisionTableResult dishDecisionResult = decisionService.evaluateDecisionTableByKey("dish", variables);
       String desiredDish = dishDecisionResult.getSingleEntry();
 
-      System.out.println("Desired dish: " + desiredDish);
+      LOGGER.log(Level.INFO, "\n\nDesired dish: {0}\n\n", desiredDish);
 
       DmnDecisionTableResult beveragesDecisionResult = decisionService.evaluateDecisionTableByKey("beverages", variables);
       List<Object> beverages = beveragesDecisionResult.collectEntries("beverages");
 
-      System.out.println("Desired beverages: " + beverages);
+      LOGGER.log(Level.INFO, "\n\nDesired beverages: {0}\n\n", beverages);
     }
 
 }
